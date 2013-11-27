@@ -2,6 +2,8 @@
 require './piece.rb'
 
 class Pawn < Piece
+  attr_accessor :unicode_char
+
   STRAIGHTS = [   [ 0,  1],
                   [ 0,  2]]
 
@@ -14,10 +16,11 @@ class Pawn < Piece
   INVERTED_DIAGONALS = [[ 1,  1],
                         [ -1, 1]]
 
-  def initialize
-    super
+  def initialize(grid, position, color)
+    super(grid, position, color)
     @straights = STRAIGHTS
     @diagonals = DIAGONALS
+    @unicode_char
     direction_setter
   end
 

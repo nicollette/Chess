@@ -1,4 +1,5 @@
 class Piece
+  attr_accessor :unicode_char
   STRAIGHTS = [   [ 0,  1],
                   [ 1,  0],
                   [-1,  0],
@@ -15,6 +16,7 @@ class Piece
     @grid = grid
     @position = position
     @color = color
+    @unicode_char
   end
 
   def moves
