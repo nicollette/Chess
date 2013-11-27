@@ -42,7 +42,19 @@ class Board
   end
 
   def display_grid
-
+    puts "   0 1 2 3 4 5 6 7"
+    puts
+    @grid.each_with_index do |row, index|
+      print "#{index}  "
+      row.each do |tile|
+        print "#{tile.render} "
+      end
+    end
   end
 
+end
+
+if $PROGRAM_NAME == __FILE__
+  new_board = Board.new
+  new_board.display_grid
 end
