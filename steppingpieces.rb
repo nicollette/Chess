@@ -1,4 +1,5 @@
-require "./piece.rb"
+# encoding: utf-8
+require './piece.rb'
 
 class SteppingPieces < Piece
 
@@ -23,6 +24,7 @@ class SteppingPieces < Piece
 end
 
 class Knight < SteppingPieces
+
   def move_dir
     [  [-2, -1],
         [-2,  1],
@@ -33,10 +35,18 @@ class Knight < SteppingPieces
         [ 2, -1],
         [ 2,  1]]
   end
+
+  def render_unicode
+    @unicode_char = @color == "black" ? "♞" : "♘"
+  end
 end
 
 class King < SteppingPieces
   def move_dir
     STRAIGHTS + DIAGONALS
+  end
+
+  def render_unicode
+    @unicode_char = @color == "black" ? "♚" : "♔"
   end
 end

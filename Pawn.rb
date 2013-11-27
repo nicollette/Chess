@@ -1,3 +1,4 @@
+# encoding: utf-8
 require './piece.rb'
 
 class Pawn < Piece
@@ -18,6 +19,10 @@ class Pawn < Piece
     @straights = STRAIGHTS
     @diagonals = DIAGONALS
     direction_setter
+  end
+
+  def render_unicode
+    @unicode_char = @color == "black" ? "♟" : "♙"
   end
 
   def moves
