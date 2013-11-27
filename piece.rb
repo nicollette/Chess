@@ -1,4 +1,13 @@
 class Piece
+  STRAIGHTS = [   [ 0,  1],
+                  [ 1,  0],
+                  [-1,  0],
+                  [ 0, -1]]
+
+  DIAGONALS = [     [ 1,  1],
+                    [ 1, -1],
+                    [-1, -1],
+                    [-1,  1]]
 
   attr_reader :position, :color
 
