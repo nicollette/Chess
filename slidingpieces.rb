@@ -7,7 +7,7 @@ class SlidingPieces < Piece
     possible_moves = []
 
     move_dirs.each do |move_dir|
-      possible_moves << single_direction_moves(move_dir)
+      possible_moves.concat(single_direction_moves(move_dir))
     end
     possible_moves
   end
@@ -15,18 +15,21 @@ class SlidingPieces < Piece
 
   def single_direction_moves(move_dir)
     one_direction_moves = []
-    x = @position[1] + move_dir[1]
-    y = @position[0] + move_dir[0]
+    y = @position[1] + move_dir[1]
+    x = @position[0] + move_dir[0]
 
    while @grid.within_bounds?(x, y)
+
       if @grid.grid[x][y].nil?
         one_direction_moves << [x, y]
-        x += move_dir[1]
-        y += move_dir[0]
+      elsif @grid.grid[x][y].color  == @color
+        break
       elsif @grid.grid[x][y].color != @color
         one_direction_moves << [x, y]
-        x = -1 #setting piece out of bound to break loop
+        x = -9 #setting piece out of bound to break loop
       end
+      y += move_dir[1]
+      x += move_dir[0]
     end
 
     one_direction_moves

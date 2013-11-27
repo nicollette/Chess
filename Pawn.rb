@@ -3,19 +3,19 @@ require './piece.rb'
 require 'debugger'
 
 class Pawn < Piece
-  attr_accessor :unicode_char
+  attr_accessor :unicode_char, :position
 
-  STRAIGHTS = [   [ 0,  1],
-                  [ 0,  2]]
+  STRAIGHTS = [   [ 1,  0],
+                  [ 2,  0]]
 
   DIAGONALS = [     [ 1,  1],
-                    [ -1, 1]]
+                    [ 1, -1]]
 
-  INVERTED_STRAIGHTS = [   [ 0, -1],
-                           [0,  -2]]
+  INVERTED_STRAIGHTS = [   [ -1, 0],
+                           [ -2, 0]]
 
-  INVERTED_DIAGONALS = [[ 1,  1],
-                        [ -1, 1]]
+  INVERTED_DIAGONALS = [[ -1,  -1],
+                        [ -1,   1]]
 
   def initialize(grid, position, color)
     super(grid, position, color)
@@ -37,9 +37,9 @@ class Pawn < Piece
     y = @position[1]
 
     unless blocked?(x, y)
-      possible_moves << [x, y + @straights[0][1]]
+      possible_moves << [x + @straights[0][0], y]
       if jump?(x,y)
-        possible_moves << [x, y + @straights[1][1]]
+        possible_moves << [x +@straights[1][0], y]
       end
     end
     possible_moves.concat(eat_diagonals(x,y))
@@ -54,12 +54,12 @@ class Pawn < Piece
 
   def blocked?(x, y)
     forward_one = @straights[0]
-    !@grid.grid[x + forward_one[1]][y].nil?
+    !@grid.grid[x + forward_one[0]][y].nil?
   end
 
   def jump?(x,y)
     forward_two = @straights[1]
-    @grid.grid[x + forward_two[1]][y].nil?
+    @grid.grid[x + forward_two[0]][y].nil?
   end
 
   def eat_diagonals(x,y)

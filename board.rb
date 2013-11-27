@@ -32,10 +32,6 @@ def set_up_others
   end
 end
 
-# def empty?(position)
-#   @grid[postion[1]][position[0]].nil?
-# end
-
 def to_s
 end
 
@@ -63,7 +59,14 @@ end
 
 if $PROGRAM_NAME == __FILE__
 new_board = Board.new
+
+
+pawn1 = King.new(new_board, [2,3], "black")
+new_board.grid[2][3] = pawn1
+new_board.grid[0][6].moves
+
+new_board.grid[1][6].moves
+p new_board.grid[2][3].moves
 new_board.display_grid
-p new_board.grid[1][1].moves
-p new_board.grid[0][0].moves
+
 end
