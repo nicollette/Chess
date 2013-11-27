@@ -5,6 +5,8 @@ require './slidingpieces.rb'
 
 class Board
 
+attr_reader :grid
+
 def initialize
   @grid = Array.new(8) {Array.new(8)}
   set_up_pawns
@@ -30,9 +32,9 @@ def set_up_others
   end
 end
 
-def empty?(position)
-  @grid[postion[1]][position[0]]
-end
+# def empty?(position)
+#   @grid[postion[1]][position[0]].nil?
+# end
 
 def to_s
 end
@@ -62,4 +64,6 @@ end
 if $PROGRAM_NAME == __FILE__
 new_board = Board.new
 new_board.display_grid
+p new_board.grid[1][1].moves
+p new_board.grid[0][0].moves
 end

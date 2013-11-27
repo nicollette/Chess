@@ -12,7 +12,7 @@ class Piece
 
   attr_reader :position, :color
 
-  def initialize(grid, postion, color)
+  def initialize(grid, position, color)
     @grid = grid
     @position = position
     @color = color

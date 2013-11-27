@@ -1,5 +1,6 @@
 # encoding: utf-8
 require './piece.rb'
+require 'debugger'
 
 class Pawn < Piece
   attr_accessor :unicode_char
@@ -28,13 +29,14 @@ class Pawn < Piece
     @unicode_char = @color == "black" ? "♟" : "♙"
   end
 
+
   def moves
     possible_moves = []
 
-    x = @position[1]
-    y = @position[0]
+    x = @position[0]
+    y = @position[1]
 
-    unless blocked?(x,y)
+    unless blocked?(x, y)
       possible_moves << [x, y + @straights[0][1]]
       if jump?(x,y)
         possible_moves << [x, y + @straights[1][1]]
@@ -50,20 +52,21 @@ class Pawn < Piece
     end
   end
 
-  def blocked?(x,y)
+  def blocked?(x, y)
     forward_one = @straights[0]
-    !@grid[x,y+forward_one[1]].empty?
+    !@grid.grid[x + forward_one[1]][y].nil?
   end
 
   def jump?(x,y)
     forward_two = @straights[1]
-    !@grid[x,y+forward_two[1]].empty?
+    @grid.grid[x + forward_two[1]][y].nil?
   end
 
   def eat_diagonals(x,y)
     diagonal_moves = []
     @diagonals.each do |diagonal|
-      unless @grid[x+diagonal[0]][y+diagonal[1]].color == @color
+      next if @grid.grid[x+diagonal[0]][y+diagonal[1]].nil?
+      unless @grid.grid[x+diagonal[0]][y+diagonal[1]].color == @color
         diagonal_moves << [x+diagonal[0],y+diagonal[1]]
       end
     end
