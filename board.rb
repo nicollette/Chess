@@ -2,15 +2,20 @@
 require './pawn.rb'
 require './steppingpieces.rb'
 require './slidingpieces.rb'
+require 'colorize'
 
 class Board
 
-  attr_reader :grid
+  attr_accessor :grid
 
-  def initialize
-    @grid = Array.new(8) {Array.new(8)}
-    set_up_pawns
-    set_up_others
+  def initialize(grid = nil)
+    if grid.nil?
+      @grid = Array.new(8) {Array.new(8)}
+      set_up_pawns
+      set_up_others
+    else
+      @grid = grid
+    end
   end
 
   def set_up_pawns
@@ -32,6 +37,23 @@ class Board
     end
   end
 
+  def move(start_pos, end_pos)
+    start_obj = @grid[start_pos[0]][start_pos[1]]
+
+    raise MovePieceError.new("Invalid ending position") unless start_obj.valid_moves.include?(end_pos)
+
+    move!(start_pos, end_pos)
+
+  end
+
+  def move!(start_pos, end_pos)
+    start_obj = @grid[start_pos[0]][start_pos[1]]
+    end_obj = @grid[end_pos[0]][end_pos[1]]
+    @grid[end_pos[0]][end_pos[1]] = @grid[start_pos[0]][start_pos[1]]
+    @grid[start_pos[0]][start_pos[1]] = nil
+    @grid[end_pos[0]][end_pos[1]].position = end_pos
+  end
+
   def within_bounds?(x, y)
     [x, y].min >= 0 && [x, y].max < 8
   end
@@ -41,13 +63,15 @@ class Board
     puts
     @grid.each_with_index do |row, index|
       print "#{index}  "
-      row.each do |tile|
+      row.each_with_index do |tile, idx|
+        bg_color = (idx.odd? && index.odd?) || (idx.even? && index.even?) ? :black : :white
         if tile.nil?
-          print "_ "
+          print "  ".colorize(:color => :blue, :background => bg_color)
         else
-        print "#{tile.render_unicode} "
+          print "#{tile.render_unicode} ".colorize(:color => :blue, :background => bg_color)
         end
       end
+
       puts
     end
   end
@@ -55,6 +79,16 @@ class Board
   def in_check?(color)
     king_position = find_king_pos(color)
     return true if possible_opposing_moves(color).include?(king_position)
+  end
+
+  def checkmate?(color)
+    return false unless in_check?(color)
+
+    our_pieces = pieces.select { |piece| piece.color == color }
+    our_pieces.all? do |piece|
+      piece.valid_moves.empty?
+    end
+
   end
 
   def find_king_pos(color)
@@ -80,19 +114,23 @@ class Board
   def pieces
     @grid.flatten.compact
   end
+
+  def dup
+    duped_board = Board.new
+    dupped_array = Array.new(8) { Array.new(8) }
+    dupped_array.each_with_index do |row, row_idx|
+      row.each_index do |col_idx|
+        next if @grid[row_idx][col_idx].nil?
+        color = @grid[row_idx][col_idx].color
+        duped_piece = @grid[row_idx][col_idx].class.new(duped_board, [row_idx, col_idx], color)
+        dupped_array[row_idx][col_idx] = duped_piece
+      end
+    end
+    duped_board.grid = dupped_array
+    duped_board
+  end
+
 end
 
-if $PROGRAM_NAME == __FILE__
-new_board = Board.new
-# new_board.find_king_pos("black").position
-new_board.possible_opposing_moves("white")
-pawn1 = King.new(new_board, [2,3], "white")
-new_board.grid[2][3] = pawn1
-# new_board.grid[0][6].moves
-#
-# new_board.grid[1][6].moves
-# p new_board.grid[2][3].moves
-p new_board.in_check?("black")
-new_board.display_grid
-
+class MovePieceError < StandardError
 end
