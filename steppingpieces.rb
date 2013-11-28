@@ -2,7 +2,6 @@
 require './piece.rb'
 
 class SteppingPieces < Piece
-
   def moves
     possible_moves = []
 
@@ -20,20 +19,21 @@ class SteppingPieces < Piece
     end
     possible_moves
   end
-
 end
 
 class Knight < SteppingPieces
 
   def move_dir
-    [  [-2, -1],
+    [
+        [-2, -1],
         [-2,  1],
         [-1, -2],
         [-1,  2],
         [ 1, -2],
         [ 1,  2],
         [ 2, -1],
-        [ 2,  1]]
+        [ 2,  1]
+    ]
   end
 
   def render_unicode

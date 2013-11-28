@@ -8,8 +8,10 @@ class Game
 
   def play(player1, player2)
     current_player = player1
+
     until @board.checkmate?(current_player.color)
       puts "#{current_player.color}'s Turn \n\n"
+
       begin
         @board.display_grid
         start_pos, end_pos = current_player.play_turn
@@ -22,6 +24,7 @@ class Game
         puts error.message
         retry
       end
+
       current_player = current_player == player1 ? player2 : player1
     end
     puts "#{current_player.color} won!"

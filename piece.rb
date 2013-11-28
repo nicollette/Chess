@@ -1,14 +1,18 @@
 class Piece
   attr_accessor :unicode_char, :position
-  STRAIGHTS = [   [ 0,  1],
-                  [ 1,  0],
-                  [-1,  0],
-                  [ 0, -1]]
+  STRAIGHTS = [
+    [ 0,  1],
+    [ 1,  0],
+    [-1,  0],
+    [ 0, -1]
+  ]
 
-  DIAGONALS = [     [ 1,  1],
-                    [ 1, -1],
-                    [-1, -1],
-                    [-1,  1]]
+  DIAGONALS = [
+    [ 1,  1],
+    [ 1, -1],
+    [-1, -1],
+    [-1,  1]
+  ]
 
   attr_reader :color
 
