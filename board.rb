@@ -1,8 +1,9 @@
 # encoding: utf-8
-require './pawn.rb'
-require './steppingpieces.rb'
-require './slidingpieces.rb'
+require './pawn'
+require './steppingpieces'
+require './slidingpieces'
 require 'colorize'
+require './exceptions'
 
 class Board
 
@@ -18,40 +19,13 @@ class Board
     end
   end
 
-  def set_up_pawns
-    [1, 6].each do |row|
-      color = row == 1 ? "black" : "white"
-      @grid[row].each_index do |col|
-        @grid[row][col] = Pawn.new(self, [row, col], color)
-      end
+  def checkmate?(color)
+    return false unless in_check?(color)
+
+    our_pieces = pieces.select { |piece| piece.color == color }
+    our_pieces.all? do |piece|
+      piece.valid_moves.empty?
     end
-  end
-
-  BACKROW_PIECES = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
-  def set_up_others
-    [0, 7].each do |row|
-      color = row == 0 ? "black" : "white"
-      BACKROW_PIECES.each_with_index do |piece, col|
-        @grid[row][col] = piece.new(self, [row, col], color)
-      end
-    end
-  end
-
-  def move(start_pos, end_pos)
-    start_obj = @grid[start_pos[0]][start_pos[1]]
-
-    raise MovePieceError.new("Invalid ending position") unless start_obj.valid_moves.include?(end_pos)
-
-    move!(start_pos, end_pos)
-
-  end
-
-  def move!(start_pos, end_pos)
-    start_obj = @grid[start_pos[0]][start_pos[1]]
-    end_obj = @grid[end_pos[0]][end_pos[1]]
-    @grid[end_pos[0]][end_pos[1]] = @grid[start_pos[0]][start_pos[1]]
-    @grid[start_pos[0]][start_pos[1]] = nil
-    @grid[end_pos[0]][end_pos[1]].position = end_pos
   end
 
   def within_bounds?(x, y)
@@ -71,9 +45,30 @@ class Board
           print "#{tile.render_unicode} ".colorize(:color => :blue, :background => bg_color)
         end
       end
-
       puts
     end
+  end
+
+  def [](pos)
+    x, y = pos
+    @grid[x][y]
+  end
+
+  def move(start_pos, end_pos)
+    unless self[start_pos].valid_moves.include?(end_pos)
+      raise MovePieceError.new("Invalid ending position")
+    end
+
+    move!(start_pos, end_pos)
+  end
+
+  def move!(start_pos, end_pos)
+    a, b = start_pos
+    x, y = end_pos
+
+    @grid[x][y] = @grid[a][b]
+    @grid[a][b] = nil
+    @grid[x][y].position = end_pos
   end
 
   def in_check?(color)
@@ -81,15 +76,23 @@ class Board
     return true if possible_opposing_moves(color).include?(king_position)
   end
 
-  def checkmate?(color)
-    return false unless in_check?(color)
-
-    our_pieces = pieces.select { |piece| piece.color == color }
-    our_pieces.all? do |piece|
-      piece.valid_moves.empty?
+  def dup
+    duped_board = Board.new
+    duped_array = Array.new(8) { Array.new(8) }
+    duped_array.each_with_index do |row, row_idx|
+      row.each_index do |col_idx|
+        next if @grid[row_idx][col_idx].nil?
+        clr = @grid[row_idx][col_idx].color
+        piece = @grid[row_idx][col_idx].class
+        duped_piece = piece.new(duped_board, [row_idx, col_idx], clr)
+        duped_array[row_idx][col_idx] = duped_piece
+      end
     end
-
+    duped_board.grid = duped_array
+    duped_board
   end
+
+  private
 
   def find_king_pos(color)
     @grid.each do |row|
@@ -99,38 +102,38 @@ class Board
     end
   end
 
-  def possible_opposing_moves(color)
-    selected_array_pieces = pieces.select do |piece|
-      piece.color != color
-    end
-
-    possible_moves = selected_array_pieces.inject([]) do |result, piece|
-      result.concat(piece.moves)
-    end
-
-    possible_moves.uniq
-  end
-
   def pieces
     @grid.flatten.compact
   end
 
-  def dup
-    duped_board = Board.new
-    dupped_array = Array.new(8) { Array.new(8) }
-    dupped_array.each_with_index do |row, row_idx|
-      row.each_index do |col_idx|
-        next if @grid[row_idx][col_idx].nil?
-        color = @grid[row_idx][col_idx].color
-        duped_piece = @grid[row_idx][col_idx].class.new(duped_board, [row_idx, col_idx], color)
-        dupped_array[row_idx][col_idx] = duped_piece
-      end
+  def possible_opposing_moves(color)
+    selected_array_pieces = pieces.select do |piece|
+      piece.color != color
     end
-    duped_board.grid = dupped_array
-    duped_board
+    possible_moves = selected_array_pieces.inject([]) do |result, piece|
+      result.concat(piece.moves)
+    end
+    possible_moves.uniq
   end
 
-end
+  def set_up_pawns
+    [1, 6].each do |row|
+      color = row == 1 ? "black" : "white"
+      @grid[row].each_index do |col|
+        @grid[row][col] = Pawn.new(self, [row, col], color)
+      end
+    end
+  end
 
-class MovePieceError < StandardError
+  BACKROW_PIECES =
+    [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
+
+  def set_up_others
+    [0, 7].each do |row|
+      color = row == 0 ? "black" : "white"
+      BACKROW_PIECES.each_with_index do |piece, col|
+        @grid[row][col] = piece.new(self, [row, col], color)
+      end
+    end
+  end
 end

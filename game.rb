@@ -1,4 +1,5 @@
 require './board'
+require './exceptions'
 
 class Game
   def initialize
@@ -8,14 +9,12 @@ class Game
   def play(player1, player2)
     current_player = player1
     until @board.checkmate?(current_player.color)
-
-      puts "#{current_player.color}'s Turn"
-      puts
-      @board.display_grid
+      puts "#{current_player.color}'s Turn \n\n"
       begin
-        starting_pos, ending_pos = current_player.play_turn
-        check_move_validity(starting_pos, current_player)
-        @board.move(starting_pos, ending_pos)
+        @board.display_grid
+        start_pos, end_pos = current_player.play_turn
+        check_move_validity(start_pos, current_player)
+        @board.move(start_pos, end_pos)
       rescue NotYourPieceError => error
         puts error.message
         retry
@@ -28,20 +27,13 @@ class Game
     puts "#{current_player.color} won!"
   end
 
-  def check_move_validity(starting_pos, current_player)
-    start_obj = @board.grid[starting_pos[0]][starting_pos[1]]
-    raise MovePieceError.new("No piece at starting position") if start_obj.nil?
-    if @board.grid[starting_pos[0]][starting_pos[1]].color != current_player.color
+  def check_move_validity(start_pos, current_player)
+    if @board[start_pos].nil?
+      raise MovePieceError.new("No piece at starting position")
+    elsif @board[start_pos].color != current_player.color
       raise NotYourPieceError.new("You can't move the other player's piece.")
     end
   end
-
-end
-
-class NotYourPieceError < StandardError
-end
-
-class MovePieceError < StandardError
 end
 
 class HumanPlayer
@@ -52,13 +44,13 @@ class HumanPlayer
   end
 
   def play_turn
-    puts "Please choose a starting piece to move: x,y"
-      starting_pos = gets.chomp.split(",").map { |i| i.to_i }
+    puts "Please choose a starting piece to move, enter in this format 'x,y'"
+    start_pos = gets.chomp.split(",").map { |i| i.to_i }
 
-    puts "Where would you like to move the piece: x,y"
-    ending_pos = gets.chomp.split(",").map { |i| i.to_i }
+    puts "Where would you like to move the piece, enter in this format 'x,y'"
+    end_pos = gets.chomp.split(",").map { |i| i.to_i }
 
-    [starting_pos, ending_pos]
+    [start_pos, end_pos]
   end
 
 end
@@ -66,9 +58,8 @@ end
 if $PROGRAM_NAME == __FILE__
   new_game = Game.new
 
-
   player1 = HumanPlayer.new("white")
   player2 = HumanPlayer.new("black")
-   new_game.play(player1, player2)
+  new_game.play(player1, player2)
 
 end
