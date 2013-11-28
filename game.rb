@@ -1,5 +1,7 @@
-require './board'
-require './exceptions'
+# require './board.rb'
+# require './exceptions.rb'
+require_relative 'board'
+require_relative 'exceptions'
 
 class Game
   def initialize

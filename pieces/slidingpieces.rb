@@ -1,5 +1,5 @@
-# encoding: utf-8
-require './piece.rb'
+# require './piece.rb'
+require_relative 'piece'
 
 class SlidingPieces < Piece
 
@@ -32,37 +32,5 @@ class SlidingPieces < Piece
     end
 
     one_direction_moves
-  end
-end
-
-
-class Rook < SlidingPieces
-  def move_dirs
-    STRAIGHTS
-  end
-
-  def render_unicode
-    @unicode_char = @color == "black" ? "♜" : "♖"
-  end
-end
-
-class Bishop < SlidingPieces
-  def move_dirs
-    DIAGONALS
-  end
-
-  def render_unicode
-    @unicode_char = @color == "black" ? "♝" : "♗"
-  end
-end
-
-
-class Queen < SlidingPieces
-  def move_dirs
-    STRAIGHTS + DIAGONALS
-  end
-
-  def render_unicode
-    @unicode_char = @color == "black" ? "♛" : "♕"
   end
 end
