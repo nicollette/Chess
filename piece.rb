@@ -1,5 +1,7 @@
 class Piece
+  attr_reader :color
   attr_accessor :unicode_char, :position
+
   STRAIGHTS = [
     [ 0,  1],
     [ 1,  0],
@@ -14,10 +16,8 @@ class Piece
     [-1,  1]
   ]
 
-  attr_reader :color
-
-  def initialize(grid, position, color)
-    @grid = grid
+  def initialize(board, position, color)
+    @board = board
     @position = position
     @color = color
     @unicode_char
@@ -30,7 +30,7 @@ class Piece
   def valid_moves
     valids = []
     moves.each do |possible_move|
-      duped_board = @grid.dup
+      duped_board = @board.dup
       duped_board.move!(@position, possible_move)
       valids << possible_move unless duped_board.in_check?(@color)
     end

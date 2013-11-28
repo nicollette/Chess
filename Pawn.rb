@@ -54,19 +54,19 @@ class Pawn < Piece
 
   def blocked?(x, y)
     forward_one = @straights[0]
-    !@grid.grid[x + forward_one[0]][y].nil?
+    !@board.grid[x + forward_one[0]][y].nil?
   end
 
   def jump?(x,y)
     forward_two = @straights[1]
-    @grid.grid[x + forward_two[0]][y].nil?
+    @board.grid[x + forward_two[0]][y].nil?
   end
 
   def eat_diagonals(x,y)
     diagonal_moves = []
     @diagonals.each do |diagonal|
-      next if @grid.grid[x+diagonal[0]][y+diagonal[1]].nil?
-      unless @grid.grid[x+diagonal[0]][y+diagonal[1]].color == @color
+      next if @board.grid[x+diagonal[0]][y+diagonal[1]].nil?
+      unless @board.grid[x+diagonal[0]][y+diagonal[1]].color == @color
         diagonal_moves << [x+diagonal[0],y+diagonal[1]]
       end
     end

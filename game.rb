@@ -32,9 +32,9 @@ class Game
 
   def check_move_validity(start_pos, current_player)
     if @board[start_pos].nil?
-      raise MovePieceError.new("No piece at starting position")
+      raise MovePieceError.new("THERE IS NO PIECE TO MOVE")
     elsif @board[start_pos].color != current_player.color
-      raise NotYourPieceError.new("You can't move the other player's piece.")
+      raise NotYourPieceError.new("YOU CAN'T MOVE YOUR OPPONENT'S PIECE")
     end
   end
 end
@@ -47,10 +47,10 @@ class HumanPlayer
   end
 
   def play_turn
-    puts "Please choose a starting piece to move, enter in this format 'x,y'"
+    puts "Please choose a piece to move, enter in this format 'x,y'"
     start_pos = gets.chomp.split(",").map { |i| i.to_i }
 
-    puts "Where would you like to move the piece, enter in this format 'x,y'"
+    puts "Where would you like to move this piece, enter in this format 'x,y'"
     end_pos = gets.chomp.split(",").map { |i| i.to_i }
 
     [start_pos, end_pos]

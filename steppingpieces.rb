@@ -9,11 +9,11 @@ class SteppingPieces < Piece
       y = @position[1] + move_dir[1]
       x = @position[0] + move_dir[0]
 
-      next unless @grid.within_bounds?(x, y)
+      next unless @board.within_bounds?(x, y)
 
-      if @grid.grid[x][y].nil?
+      if @board.grid[x][y].nil?
         possible_moves << [x, y]
-      elsif @grid.grid[x][y].color != @color
+      elsif @board.grid[x][y].color != @color
         possible_moves << [x, y]
       end
     end
