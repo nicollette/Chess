@@ -29,7 +29,7 @@ class Game
 
       current_player = current_player == player1 ? player2 : player1
     end
-    puts "#{current_player.color} won!"
+    puts "CHECKMATE! \n\n #{current_player.color} won!"
   end
 
   # these errors should be in the board class in the MOVES method

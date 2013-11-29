@@ -29,27 +29,25 @@ class Piece
   end
 
   def moves
-    raise NotImplimented
+    raise NotImplimentedError
   end
 
-  # Ned has a render method that calls a symbols method
-    #Symbols method take a color and must be implemented in each
-    # sub class to display unicode char
+  def render
+    unicode_char[color]
+  end
 
-  # Ned has helper method for VALID_MOVES, called MOVE_INTO_CHECK?
-  # each possible move is passed in and does lines 44-46, except
-  # doesn't add to valid moves arr
-  #
-  #VALID_MOVES method only takes the moves that return false to
-  # MOVE_INTO_CHECK
+  def unicode_char
+    raise NotImplementedError
+  end
+
   def valid_moves
-    valids = []
-    moves.each do |possible_move|
-      duped_board = board.dup
-      duped_board.move!(@position, possible_move)
-      valids << possible_move unless duped_board.in_check?(@color)
-    end
-    valids
+    moves.reject { |possible_move| move_into_check?(possible_move) }
+  end
+
+  def move_into_check?(move)
+    duped_board = board.dup
+    duped_board.move!(position, move)
+    duped_board.in_check?(color)
   end
 
 end

@@ -45,7 +45,7 @@ class Board
         if tile.nil?
           print "  ".colorize(:color => :blue, :background => bg_color)
         else
-          print "#{tile.render_unicode} ".colorize(:color => :blue, :background => bg_color)
+          print "#{tile.render} ".colorize(:color => :blue, :background => bg_color)
         end
       end
       puts

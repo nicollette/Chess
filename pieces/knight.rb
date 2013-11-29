@@ -16,8 +16,8 @@ class Knight < SteppingPieces
     ]
   end
 
-  def render_unicode
-    @unicode_char = @color == "black" ? "♞" : "♘"
+  def unicode_char
+    { "black" => "♞", "white" => "♘" }
   end
 end
 

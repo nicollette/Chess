@@ -6,9 +6,10 @@ class King < SteppingPieces
     STRAIGHTS + DIAGONALS
   end
 
-  def render_unicode
-    @unicode_char = @color == "black" ? "♚" : "♔"
+  def unicode_char
+    { "black" => "♚", "white" => "♔" }
   end
+
 end
 
 # Ned has MOVE_DIFFS method instead of MOVE_DIR, which returns
