@@ -1,4 +1,3 @@
-# require './piece.rb'
 require_relative 'piece'
 
 class SlidingPieces < Piece
@@ -14,20 +13,22 @@ class SlidingPieces < Piece
 
   def single_direction_moves(move_dir)
     one_direction_moves = []
-    x = @position[0] + move_dir[0]
+    x = @position[0] + move_dir[0] #increment only in while loop
     y = @position[1] + move_dir[1]
+    # have this while condition to be true
+    #then only add breaks for when conditions are met
+      #break unless within_bounds?, or if pos contains piece of other color
+   while board.within_bounds?(x, y)
 
-   while @board.within_bounds?(x, y)
-
-      if @board.grid[x][y].nil?
+      if board.grid[x][y].nil?
         one_direction_moves << [x, y]
-      elsif @board.grid[x][y].color  == @color
+      elsif board.grid[x][y].color  == @color
         break
-      elsif @board.grid[x][y].color != @color
+      elsif board.grid[x][y].color != @color
         one_direction_moves << [x, y]
         x = -9 #setting piece out of bound to break loop
       end
-      y += move_dir[1]
+      y += move_dir[1] # move these to the top of the while loop
       x += move_dir[0]
     end
 

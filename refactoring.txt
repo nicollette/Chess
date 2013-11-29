@@ -1,0 +1,13 @@
+Refactoring notes
+
+-create attr_reader/writer/accessor for all instance variables used in methos
+
+Piece.rb
+-
+
+Board.rb
+- Think about changing var name from GRID TO ROWS like ned's
+
+Game class:
+- initialize players, current player
+

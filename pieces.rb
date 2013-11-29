@@ -1,10 +1,3 @@
-# require 'pieces/pawn'
-# require 'pieces/knight'
-# require 'pieces/king'
-# require 'pieces/rook'
-# require 'pieces/biship'
-# require 'pieces/queen'
-
 require_relative 'pieces/bishop'
 require_relative 'pieces/king'
 require_relative 'pieces/knight'

@@ -1,5 +1,4 @@
 # encoding: utf-8
-# require './slidingpieces.rb'
 require_relative 'slidingpieces'
 
 class Rook < SlidingPieces
