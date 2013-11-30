@@ -20,12 +20,8 @@ class Piece
     @board = board
     @position = position
     @color = color
-    @unicode_char # doesn't have this instance VAR
 
-    #Ned's solution calls a board.add_piece method that assigns
-    # self to a postition on the board
-    # so that all pieces that are created are automatically
-    #assigned to the board
+    board.add_piece(@position, self)
   end
 
   def moves
