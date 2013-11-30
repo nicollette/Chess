@@ -7,6 +7,6 @@ class Bishop < SlidingPieces
   end
 
   def unicode_char
-    { "black" => "♝", "white" => "♗" }
+    { :black => "♝", :white => "♗" }
   end
 end

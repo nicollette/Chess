@@ -30,7 +30,7 @@ class Pawn < Piece
   end
 
   def unicode_char
-    { "black" => "♟", "white" => "♙" }
+    { :black => "♟", :white => "♙" }
   end
 
   # refactor this MOVES method
@@ -50,7 +50,7 @@ class Pawn < Piece
   end
 
   def direction_setter
-    if @color == "white"
+    if @color == :white
       @straights = INVERTED_STRAIGHTS
       @diagonals = INVERTED_DIAGONALS
     end

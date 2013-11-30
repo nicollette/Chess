@@ -3,7 +3,6 @@ require_relative 'pieces'
 require_relative 'exceptions'
 
 class Board
-
   attr_accessor :grid
 
   def initialize(fill_board)
@@ -31,10 +30,6 @@ class Board
     end
   end
 
-  def within_bounds?(x, y)
-    [x, y].all? { |coord| coord.between?(0, 7) }
-  end
-
   def display_grid
     puts "   0 1 2 3 4 5 6 7 \n\n"
 
@@ -58,6 +53,21 @@ class Board
     end
   end
 
+  def dup
+    new_board = Board.new(false)
+
+    pieces.each do |piece|
+      piece.class.new(new_board, piece.position, piece.color)
+    end
+
+    new_board
+  end
+
+  def in_check?(color)
+    king_position = find_king_pos(color)
+    return true if possible_opposing_moves(color).include?(king_position)
+  end
+
   def move(start_pos, end_pos, current_player)
     if self[start_pos].nil?
       raise MovePieceError.new("THERE IS NO PIECE TO MOVE")
@@ -73,30 +83,25 @@ class Board
   end
 
   def move!(start_pos, end_pos)
-    a, b = start_pos
-    x, y = end_pos
-
-    grid[x][y] = grid[a][b]
-    grid[a][b] = nil
-    grid[x][y].position = end_pos
+    self[end_pos] = self[start_pos]
+    self[start_pos] = nil
+    self[end_pos].position = end_pos
   end
 
-  def in_check?(color)
-    king_position = find_king_pos(color)
-    return true if possible_opposing_moves(color).include?(king_position)
-  end
-
-  def dup
-    new_board = Board.new(false)
-
-    pieces.each do |piece|
-      piece.class.new(new_board, piece.position, piece.color)
-    end
-
-    new_board
+  def within_bounds?(x, y)
+    [x, y].all? { |coord| coord.between?(0, 7) }
   end
 
   private
+  def create_board(fill_board)
+    @grid = Array.new(8) { Array.new(8) }
+    if fill_board
+      [:black, :white].each do |color|
+        set_up_pawns(color)
+        set_up_others(color)
+      end
+    end
+  end
 
   def find_king_pos(color)
     pieces.find { |piece| piece.is_a?(King) && piece.color == color }.position
@@ -116,25 +121,15 @@ class Board
     possible_moves.uniq
   end
 
-  def create_board(fill_board)
-    @grid = Array.new(8) { Array.new(8) }
-    if fill_board
-      ["black", "white"].each do |color|
-        set_up_pawns(color)
-        set_up_others(color)
-      end
-    end
-  end
-
   def set_up_pawns(color)
-    row = color == "black" ? 1 : 6
+    row = color == :black ? 1 : 6
     8.times { |col| Pawn.new(self, [row, col], color) }
   end
 
   def set_up_others(color)
     backrow_pieces =
       [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
-    row = color == "black" ? 0 : 7
+    row = color == :black ? 0 : 7
 
     backrow_pieces.each_with_index do |piece, col|
       piece.new(self, [row, col], color)

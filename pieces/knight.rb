@@ -17,7 +17,7 @@ class Knight < SteppingPieces
   end
 
   def unicode_char
-    { "black" => "♞", "white" => "♘" }
+    { :black => "♞", :white => "♘" }
   end
 end
 
