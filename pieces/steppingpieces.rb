@@ -4,22 +4,18 @@ class SteppingPieces < Piece
   def moves
     possible_moves = []
 
-    move_dirs.each do |move_dir|
-      x = @position[0] + move_dir[0]
-      y = @position[1] + move_dir[1]
+    move_dirs.each do |x, y|
+      cur_x, cur_y = @position
+      new_pos = [cur_x + x, cur_y + y]
 
-      next unless board.within_bounds?(x, y)
+      next unless board.within_bounds?(new_pos[0], new_pos[1])
 
-      if board.grid[x][y].nil?
-        possible_moves << [x, y]
-      elsif board.grid[x][y].color != @color
-        possible_moves << [x, y]
+      if board[new_pos].nil?
+        possible_moves << new_pos
+      elsif board[new_pos].color != @color
+        possible_moves << new_pos
       end
     end
     possible_moves
   end
 end
-
-# Ned has a move_diffs method that returns an array of move directions
-# the MOVE_DIFFS method is defined here but must be IMPLEMENTED on sub
-# class level
