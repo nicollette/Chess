@@ -2,8 +2,15 @@
 require_relative 'steppingpieces'
 
 class King < SteppingPieces
-  def move_dir
-    STRAIGHTS + DIAGONALS
+  def move_dirs
+    [ [ 0,  1],
+      [ 1,  0],
+      [-1,  0],
+      [ 0, -1],
+      [ 1,  1],
+      [ 1, -1],
+      [-1, -1],
+      [-1,  1] ]
   end
 
   def unicode_char

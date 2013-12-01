@@ -3,7 +3,10 @@ require_relative 'slidingpieces'
 
 class Bishop < SlidingPieces
   def move_dirs
-    DIAGONALS
+    [ [ 1,  1],
+      [ 1, -1],
+      [-1, -1],
+      [-1,  1] ]
   end
 
   def unicode_char

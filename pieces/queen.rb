@@ -3,7 +3,14 @@ require_relative 'slidingpieces'
 
 class Queen < SlidingPieces
   def move_dirs
-    STRAIGHTS + DIAGONALS
+    [ [ 0,  1],
+      [ 1,  0],
+      [-1,  0],
+      [ 0, -1],
+      [ 1,  1],
+      [ 1, -1],
+      [-1, -1],
+      [-1,  1] ]
   end
 
   def unicode_char

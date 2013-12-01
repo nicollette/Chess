@@ -3,7 +3,10 @@ require_relative 'slidingpieces'
 
 class Rook < SlidingPieces
   def move_dirs
-    STRAIGHTS
+    [ [ 0,  1],
+      [ 1,  0],
+      [-1,  0],
+      [ 0, -1] ]
   end
 
   def unicode_char

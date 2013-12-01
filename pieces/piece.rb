@@ -2,20 +2,6 @@ class Piece
   attr_reader :color, :board
   attr_accessor :unicode_char, :position
 
-  STRAIGHTS = [
-    [ 0,  1],
-    [ 1,  0],
-    [-1,  0],
-    [ 0, -1]
-  ]
-
-  DIAGONALS = [
-    [ 1,  1],
-    [ 1, -1],
-    [-1, -1],
-    [-1,  1]
-  ]
-
   def initialize(board, position, color)
     @board = board
     @position = position

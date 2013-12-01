@@ -4,7 +4,7 @@ class SteppingPieces < Piece
   def moves
     possible_moves = []
 
-    move_dir.each do |move_dir|
+    move_dirs.each do |move_dir|
       x = @position[0] + move_dir[0]
       y = @position[1] + move_dir[1]
 
