@@ -18,4 +18,10 @@ class SteppingPieces < Piece
     end
     possible_moves
   end
+  
+  private
+  
+  def move_dirs
+    raise NotImplementedError
+  end
 end

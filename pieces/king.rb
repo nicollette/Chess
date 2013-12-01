@@ -18,7 +18,3 @@ class King < SteppingPieces
   end
 
 end
-
-# Ned has MOVE_DIFFS method instead of MOVE_DIR, which returns
-# exact array of move_directions
-# I think Ned's way is clearer
