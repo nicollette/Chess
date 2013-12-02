@@ -17,6 +17,7 @@ class Game
       players[current_player].play_turn(board)
       @current_player = (current_player == :white) ? :black : :white
     end
+    
     board.display_grid
     puts "\nCHECKMATE! \n\n#{current_player.to_s} won!"
   end

@@ -1,6 +1,6 @@
 class Piece
   attr_reader :color, :board
-  attr_accessor :unicode_char, :position
+  attr_accessor :position
 
   def initialize(board, position, color)
     @board = board
@@ -25,7 +25,8 @@ class Piece
   def valid_moves
     moves.reject { |possible_move| move_into_check?(possible_move) }
   end
-
+  
+  private
   def move_into_check?(move)
     duped_board = board.dup
     duped_board.move!(position, move)

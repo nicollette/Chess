@@ -1,7 +1,6 @@
 require_relative 'piece'
 
 class SlidingPieces < Piece
-
   def moves
     possible_moves = []
 

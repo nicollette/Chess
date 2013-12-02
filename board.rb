@@ -36,17 +36,12 @@ class Board
     grid.each_with_index do |row, row_idx|
       print "#{row_idx}  "
       row.each_with_index do |tile, col_idx|
-        bg = nil
-        if (col_idx.odd? && row_idx.odd?) || (col_idx.even? && row_idx.even?)
-          bg = :black
-        else
-          bg = :white
-        end
+        bg = background_color(row_idx, col_idx)
 
         if tile.nil?
-          print "  ".colorize(:color => :blue, :background => bg)
+          print "  ".colorize(:color => :red, :background => bg)
         else
-          print "#{tile.render} ".colorize(:color => :blue, :background => bg)
+          print "#{tile.render} ".colorize(:color => :red, :background => bg)
         end
       end
       puts "\n"
@@ -93,6 +88,14 @@ class Board
   end
 
   private
+  def background_color(row_idx, col_idx)
+    if (col_idx.odd? && row_idx.odd?) || (col_idx.even? && row_idx.even?)
+      :black
+    else
+      :white
+    end
+  end
+  
   def create_board(fill_board)
     @grid = Array.new(8) { Array.new(8) }
     if fill_board
@@ -115,6 +118,7 @@ class Board
     selected_array_pieces = pieces.select do |piece|
       piece.color != color
     end
+    
     possible_moves = selected_array_pieces.inject([]) do |result, piece|
       result.concat(piece.moves)
     end
