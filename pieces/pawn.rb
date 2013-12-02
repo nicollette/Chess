@@ -4,77 +4,52 @@ require_relative 'piece'
 class Pawn < Piece
   attr_accessor :unicode_char, :position
 
-  # probably don't need to have the second element, can just
-  # increment twice
-
-  #don't even need these constatns, have a method called FORWARD_DIR
-  # like Ned, that returns -1 || 1 depending on color
-  STRAIGHTS = [   [ 1,  0],
-                  [ 2,  0]]
-
-  DIAGONALS = [     [ 1,  1],
-                    [ 1, -1]]
-  #can
-  INVERTED_STRAIGHTS = [   [ -1, 0],
-                           [ -2, 0]]
-
-  INVERTED_DIAGONALS = [[ -1,  -1],
-                        [ -1,   1]]
-
-  def initialize(board, position, color)
-    super(board, position, color)
-    @straights = STRAIGHTS
-    @diagonals = DIAGONALS
-    @unicode_char
-    direction_setter
-  end
-
   def unicode_char
     { :black => "♟", :white => "♙" }
   end
 
-  # refactor this MOVES method
   def moves
-    possible_moves = []
+    forward_moves + side_moves
+  end
 
-    x = @position[0]
-    y = @position[1]
-
-    unless blocked?(x, y)
-      possible_moves << [x + @straights[0][0], y]
-      if jump?(x,y)
-        possible_moves << [x +@straights[1][0], y]
+  private
+  def at_start_pos?
+    start_row = color == :black ? 1 : 6
+    @position[0] == start_row
+  end
+  
+  def forward_dir
+    (color == :black ) ? 1 : -1
+  end
+  
+  def forward_moves
+    moves = []
+    
+    x, y = @position
+    one_step = [x + forward_dir, y]
+    
+    if board.within_bounds?(one_step[0], one_step[1]) && board[one_step].nil?
+      moves << one_step
+      
+      two_step = [x + (2 * forward_dir), y]
+      if at_start_pos? && board[two_step].nil?
+        moves << two_step
       end
     end
-    possible_moves.concat(eat_diagonals(x,y))
+    moves
   end
-
-  def direction_setter
-    if @color == :white
-      @straights = INVERTED_STRAIGHTS
-      @diagonals = INVERTED_DIAGONALS
+  
+  def side_moves
+    x, y = @position
+    
+    side_moves = [[x + forward_dir, y - 1], [x + forward_dir, y + 1]]
+    
+    side_moves.select do |dx, dy|
+      next false unless board.within_bounds?(dx, dy)
+      new_pos = [dx, dy]
+      vulnerable_piece = board[new_pos]
+      vulnerable_piece && vulnerable_piece.color != @color
     end
-  end
-
-  def blocked?(x, y)
-    forward_one = @straights[0]
-    !board.grid[x + forward_one[0]][y].nil?
-  end
-
-  def jump?(x,y)
-    forward_two = @straights[1]
-    board.grid[x + forward_two[0]][y].nil?
-  end
-
-  def eat_diagonals(x,y)
-    diagonal_moves = []
-    @diagonals.each do |diagonal|
-      next if board.grid[x+diagonal[0]][y+diagonal[1]].nil?
-      unless board.grid[x+diagonal[0]][y+diagonal[1]].color == @color
-        diagonal_moves << [x+diagonal[0],y+diagonal[1]]
-      end
-    end
-    diagonal_moves
   end
 end
 
