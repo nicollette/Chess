@@ -3,7 +3,7 @@ Chess
 
 Chess game written in Ruby for the command-line. Run game.rb to play, and type in coordinates to move your pieces. 
 
-HIGHLIGHTS
+Highlights
 ==========
 
 *   Object-oriented design
