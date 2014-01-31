@@ -35,8 +35,9 @@ class HumanPlayer
     puts "\n#{color.upcase}'s Turn \n\n"
 
     begin
-      start_pos = get_position("Please choose a piece to move (format: x,y)")
-      end_pos = get_position("To which position? (format x,y)")
+      start_pos = get_position("Please choose a piece to move, format: y-axis, x-axis")
+      
+      end_pos = get_position("To which position?")
       board.move(start_pos, end_pos, color)
     rescue MovePieceError => error
       puts error.message
